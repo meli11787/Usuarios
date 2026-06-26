@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .edit-panel {
+        display: grid;
+        grid-template-columns: minmax(260px, .45fr) minmax(0, 1fr);
+        overflow: hidden;
+    }
+
+    .edit-summary {
+        padding: clamp(1.5rem, 4vw, 3rem);
+        color: #fff;
+        background: linear-gradient(160deg, var(--primary), #18212f);
+    }
+
+    .edit-summary h1 {
+        margin: 0;
+        font-size: clamp(2rem, 4vw, 3.4rem);
+        font-weight: 900;
+    }
+
+    .edit-form {
+        padding: clamp(1.5rem, 4vw, 3rem);
+        background: rgba(255, 255, 255, .97);
+    }
+
+    .edit-form p {
+        margin-bottom: 1rem;
+    }
+
+    .edit-form label {
+        font-weight: 700;
+    }
+
+    @media (max-width: 820px) {
+        .edit-panel {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<section class="app-panel edit-panel">
+    <div class="edit-summary">
+        <p class="mb-2">Gestion de registro</p>
+        <h1>Actualizar registro</h1>
+    </div>
+
+    <div class="edit-form">
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary px-4">Actualizar</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

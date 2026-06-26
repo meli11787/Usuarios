@@ -1,0 +1,74 @@
+<style>
+    .crm-navbar {
+        background: linear-gradient(90deg, rgba(83, 28, 112, .97), rgba(139, 47, 181, .96), rgba(217, 79, 159, .94));
+        border-bottom: 1px solid rgba(255, 255, 255, .24);
+        box-shadow: 0 10px 30px rgba(89, 32, 116, .18);
+    }
+
+    .crm-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: .65rem;
+        color: #ffffff;
+        font-weight: 800;
+        text-decoration: none;
+    }
+
+    .crm-brand-mark {
+        display: inline-grid;
+        width: 36px;
+        height: 36px;
+        place-items: center;
+        border-radius: 6px;
+        color: #64217f;
+        background: #fff0f8;
+        font-weight: 900;
+    }
+
+    .crm-navbar .nav-link {
+        color: rgba(255, 255, 255, .76);
+        font-weight: 700;
+    }
+
+    .crm-navbar .nav-link:hover,
+    .crm-navbar .nav-link:focus {
+        color: #ffffff;
+    }
+
+    .crm-nav-action {
+        border: 1px solid rgba(255, 255, 255, .42);
+        background: rgba(255, 255, 255, .12);
+        border-radius: 6px;
+        padding-inline: .9rem !important;
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg crm-navbar">
+    <div class="container-fluid px-3 px-lg-4">
+        <a class="crm-brand" href="{% url 'home' %}">
+            <span class="crm-brand-mark">Meli</span>
+            <span>Django Melii</span>
+        </a>
+
+        <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#crmNavbar" aria-controls="crmNavbar" aria-expanded="false" aria-label="Abrir menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="crmNavbar">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-lg-2">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link crm-nav-action" href="{% url 'logout' %}">Cerrar usuario</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Registrar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link crm-nav-action" href="{% url 'home' %}">Iniciar sesion</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

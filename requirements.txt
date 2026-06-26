@@ -1,0 +1,9 @@
+# Framework Principal (Versión LTS compatible con MariaDB 10.4)
+Django==4.2.11
+
+# Conector de base de datos para MariaDB/MySQL usado por django.db.backends.mysql
+mysqlclient==2.2.8
+
+# Utilidades opcionales pero recomendadas
+python-dotenv==1.0.1
+sqlparse==0.4.4

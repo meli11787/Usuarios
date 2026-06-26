@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .detail-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: center;
+        padding: 1.25rem;
+        border-bottom: 1px solid var(--line);
+        background: linear-gradient(135deg, #fff0f8, #f6e8fb);
+    }
+
+    .detail-avatar {
+        display: grid;
+        width: 58px;
+        height: 58px;
+        flex: 0 0 auto;
+        place-items: center;
+        border-radius: 8px;
+        color: #fff;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        font-size: 1.3rem;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+
+    .detail-person {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0;
+    }
+
+    .detail-item {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid #f1e2f2;
+    }
+
+    .detail-item:nth-child(odd) {
+        border-right: 1px solid #f1e2f2;
+    }
+
+    .detail-label {
+        display: block;
+        margin-bottom: .25rem;
+        color: var(--muted);
+        font-size: .78rem;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+
+    .detail-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .75rem;
+        padding: 1.25rem;
+    }
+
+    @media (max-width: 720px) {
+        .detail-header,
+        .detail-person {
+            align-items: flex-start;
+        }
+
+        .detail-header {
+            flex-direction: column;
+        }
+
+        .detail-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .detail-item:nth-child(odd) {
+            border-right: 0;
+        }
+    }
+</style>
+
+<section class="app-panel">
+    <div class="detail-header">
+        <div class="detail-person">
+            <span class="detail-avatar">{{ customer_record.first_name|first }}{{ customer_record.last_name|first }}</span>
+            <div>
+                <h1 class="section-title">{{ customer_record.first_name }} {{ customer_record.last_name }}</h1>
+                <p class="section-subtitle mb-0">ID: {{ customer_record.id }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="detail-grid">
+        <div class="detail-item">
+            <span class="detail-label">Email</span>
+            {{ customer_record.email }}
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Phone</span>
+            {{ customer_record.phone }}
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Address</span>
+            {{ customer_record.address }}
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">City</span>
+            {{ customer_record.city }}
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">State</span>
+            {{ customer_record.state }}
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Zipcode</span>
+            {{ customer_record.zip_code }}
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Create At</span>
+            {{ customer_record.created_at }}
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">ID</span>
+            {{ customer_record.id }}
+        </div>
+    </div>
+
+    <div class="detail-actions">
+        <a href="{% url 'home' %}" class="btn btn-outline-primary">Back</a>
+        <a href="{% url 'update_record' customer_record.id %}" class="btn btn-primary">Update Record</a>
+        <a href="{% url 'delete_record' customer_record.id %}" class="btn btn-danger">Delete</a>
+    </div>
+</section>
+{% endblock %}

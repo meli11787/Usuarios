@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Melii</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <style>
+        :root {
+            --page-bg: #fff7fb;
+            --surface: #ffffff;
+            --surface-soft: #f7edf8;
+            --ink: #2d1638;
+            --muted: #7f667f;
+            --line: #ead8eb;
+            --primary: #8b2fb5;
+            --primary-dark: #64217f;
+            --accent: #d94f9f;
+            --accent-soft: #ffe6f3;
+            --danger: #b83262;
+            --shadow: 0 18px 45px rgba(89, 32, 116, .14);
+        }
+
+        * {
+            letter-spacing: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 12% 12%, rgba(217, 79, 159, .16) 0 16%, transparent 32%),
+                radial-gradient(circle at 88% 18%, rgba(139, 47, 181, .16) 0 14%, transparent 30%),
+                linear-gradient(180deg, #fff7fb 0%, #f7edfb 48%, #fffafd 100%);
+            background-attachment: fixed;
+            background-size: cover;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        .app-shell {
+            width: min(1180px, calc(100% - 32px));
+            margin: 28px auto 48px;
+        }
+
+        .app-panel {
+            background: rgba(255, 255, 255, .95);
+            border: 1px solid rgba(234, 216, 235, .95);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            margin: 0;
+            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            font-weight: 800;
+            color: var(--ink);
+        }
+
+        .section-subtitle {
+            margin: .4rem 0 0;
+            color: var(--muted);
+        }
+
+        .btn {
+            border-radius: 6px;
+            font-weight: 700;
+        }
+
+        .btn-primary,
+        .btn-primary:focus {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        .btn-danger,
+        .btn-danger:focus {
+            background: var(--danger);
+            border-color: var(--danger);
+        }
+
+        .btn-outline-primary {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .form-control,
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select,
+        textarea {
+            width: 100%;
+            min-height: 44px;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: .65rem .8rem;
+        }
+
+        .form-control:focus,
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 .2rem rgba(139, 47, 181, .16);
+            outline: none;
+        }
+
+        .alert {
+            border: 0;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(24, 33, 47, .08);
+        }
+
+        .form-help,
+        .helptext {
+            display: block;
+            margin-top: .35rem;
+            color: var(--muted);
+            font-size: .9rem;
+        }
+
+        @media (max-width: 768px) {
+            .app-shell {
+                width: min(100% - 20px, 1180px);
+                margin-top: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <main class="app-shell">
+        {% if messages %}
+            <div class="mb-3">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

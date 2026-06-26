@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .form-layout {
+        display: grid;
+        grid-template-columns: minmax(0, .8fr) minmax(320px, 1fr);
+        overflow: hidden;
+    }
+
+    .form-aside {
+        padding: clamp(1.5rem, 4vw, 3rem);
+        color: #fff;
+        background:
+            linear-gradient(160deg, rgba(100, 33, 127, .92), rgba(217, 79, 159, .78)),
+            url("https://images.unsplash.com/photo-1512316609839-ce289d3eba0a?auto=format&fit=crop&w=1100&q=80");
+        background-size: cover;
+        background-position: center;
+    }
+
+    .form-aside h1 {
+        margin: 0;
+        font-size: clamp(2rem, 4vw, 3.6rem);
+        font-weight: 900;
+    }
+
+    .form-body {
+        padding: clamp(1.5rem, 4vw, 3rem);
+        background: linear-gradient(180deg, rgba(255, 255, 255, .98), rgba(255, 247, 251, .98));
+    }
+
+    .form-body p {
+        margin-bottom: 1rem;
+    }
+
+    .form-body label {
+        font-weight: 700;
+    }
+
+    @media (max-width: 850px) {
+        .form-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<section class="app-panel form-layout">
+    <div class="form-aside">
+        <p class="mb-2">Nuevo usuario</p>
+        <h1>Registro nuevo usuario</h1>
+    </div>
+
+    <div class="form-body">
+        {% if form.errors %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Error de registro:</strong> por favor revise los datos ingresados.
+                <ul class="mb-0 mt-2">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        {% endif %}
+
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary px-4">Registrar</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

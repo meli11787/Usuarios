@@ -1,0 +1,400 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .dashboard-header {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 1rem;
+        align-items: end;
+        margin-bottom: 18px;
+    }
+
+    .user-strip {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+        padding: .8rem 1rem;
+        background: linear-gradient(135deg, #ffffff, #fff0f8);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+    }
+
+    .user-initial {
+        display: grid;
+        width: 40px;
+        height: 40px;
+        place-items: center;
+        border-radius: 6px;
+        color: #fff;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+
+    .records-panel {
+        overflow: hidden;
+    }
+
+    .records-toolbar {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: center;
+        padding: 1rem 1.15rem;
+        border-bottom: 1px solid var(--line);
+        background: var(--surface-soft);
+    }
+
+    .records-table-wrap {
+        overflow-x: auto;
+    }
+
+    .records-table {
+        margin: 0;
+        min-width: 980px;
+        vertical-align: middle;
+    }
+
+    .records-table thead th {
+        padding: .9rem .85rem;
+        color: var(--muted);
+        background: #fff8fc;
+        border-bottom: 1px solid var(--line);
+        font-size: .78rem;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .records-table tbody td,
+    .records-table tbody th {
+        padding: .85rem;
+        border-bottom: 1px solid #f1e2f2;
+    }
+
+    .records-table tbody tr:hover {
+        background: #fff4fa;
+    }
+
+    .record-id-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 38px;
+        min-height: 32px;
+        border-radius: 6px;
+        color: var(--primary);
+        background: var(--accent-soft);
+        font-weight: 800;
+        text-decoration: none;
+    }
+
+    .pagination-wrap {
+        padding: 1rem;
+        background: #fff8fc;
+    }
+
+    .pagination .page-link {
+        min-width: 40px;
+        color: var(--primary);
+        border-color: var(--line);
+        text-align: center;
+    }
+
+    .pagination .active .page-link {
+        background: var(--primary);
+        border-color: var(--primary);
+    }
+
+    .login-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.08fr) minmax(320px, .72fr);
+        min-height: calc(100vh - 160px);
+        overflow: hidden;
+    }
+
+    .login-visual {
+        position: relative;
+        display: flex;
+        align-items: end;
+        overflow: hidden;
+        padding: clamp(2rem, 5vw, 4rem);
+        color: #ffffff;
+        background:
+            radial-gradient(circle at 18% 20%, rgba(255, 255, 255, .34) 0 2px, transparent 3px),
+            radial-gradient(circle at 78% 18%, rgba(255, 255, 255, .42) 0 1px, transparent 2px),
+            radial-gradient(circle at 86% 70%, rgba(255, 255, 255, .36) 0 2px, transparent 3px),
+            radial-gradient(circle at 28% 76%, rgba(255, 255, 255, .28) 0 1px, transparent 2px),
+            radial-gradient(circle at 28% 28%, rgba(255, 214, 238, .72), transparent 32%),
+            radial-gradient(circle at 76% 24%, rgba(196, 120, 255, .68), transparent 34%),
+            radial-gradient(circle at 58% 86%, rgba(255, 174, 215, .58), transparent 36%),
+            linear-gradient(145deg, #5b1b7a 0%, #9a37bd 44%, #e66aac 100%);
+        isolation: isolate;
+    }
+
+    .login-visual::before,
+    .login-visual::after {
+        position: absolute;
+        content: "";
+        inset: 0;
+        pointer-events: none;
+    }
+
+    .login-visual::before {
+        background:
+            radial-gradient(circle at 12% 68%, rgba(255, 255, 255, .92) 0 1px, transparent 2px),
+            radial-gradient(circle at 34% 16%, rgba(255, 255, 255, .84) 0 1px, transparent 2px),
+            radial-gradient(circle at 52% 42%, rgba(255, 255, 255, .70) 0 1px, transparent 2px),
+            radial-gradient(circle at 72% 58%, rgba(255, 255, 255, .82) 0 1px, transparent 2px),
+            radial-gradient(circle at 92% 34%, rgba(255, 255, 255, .76) 0 1px, transparent 2px);
+        opacity: .9;
+        z-index: 1;
+    }
+
+    .login-visual::after {
+        background: linear-gradient(180deg, transparent 0%, rgba(45, 22, 56, .42) 100%);
+        z-index: 0;
+    }
+
+    .login-visual > div {
+        position: relative;
+        z-index: 2;
+    }
+
+    .login-visual h1 {
+        max-width: 580px;
+        margin: 0;
+        font-size: clamp(2.2rem, 5vw, 4.4rem);
+        font-weight: 900;
+    }
+
+    .login-visual p {
+        max-width: 440px;
+        margin: .8rem 0 0;
+        color: rgba(255, 255, 255, .82);
+        font-size: 1.05rem;
+    }
+
+    .login-form-panel {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: clamp(1.25rem, 4vw, 3.2rem);
+        background: linear-gradient(180deg, rgba(255, 255, 255, .98), rgba(255, 247, 251, .98));
+    }
+
+    .input-row {
+        display: flex;
+        align-items: stretch;
+    }
+
+    .input-row .input-icon {
+        display: grid;
+        min-width: 44px;
+        place-items: center;
+        color: var(--primary);
+        background: #fff0f8;
+        border: 1px solid var(--line);
+        border-right: 0;
+        border-radius: 6px 0 0 6px;
+        font-weight: 900;
+    }
+
+    .input-row input {
+        border-radius: 0 6px 6px 0;
+    }
+
+    .input-row .toggle-password {
+        min-width: 44px;
+        border: 1px solid var(--line);
+        border-left: 0;
+        border-radius: 0 6px 6px 0;
+        background: #fff;
+        color: var(--primary);
+        font-weight: 900;
+    }
+
+    .input-row.has-action input {
+        border-radius: 0;
+    }
+
+    @media (max-width: 900px) {
+        .dashboard-header,
+        .login-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .login-grid {
+            min-height: auto;
+        }
+
+        .login-visual {
+            min-height: 340px;
+        }
+    }
+</style>
+
+{% if user.is_authenticated %}
+    <section class="dashboard-header">
+        <div>
+            <h1 class="section-title">Ya estas registrado en el sistema.</h1>
+            <p class="section-subtitle">Registros disponibles y datos principales de cada cliente.</p>
+        </div>
+        <div class="user-strip">
+            <span class="user-initial">{{ user.username|first }}</span>
+            <div>
+                <strong>Holiii {{ user.username }}</strong>
+                <div><a href="{% url 'logout' %}" class="text-decoration-none">Cerrar sesion</a></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="app-panel records-panel">
+        <div class="records-toolbar">
+            <strong>Listado de registros</strong>
+            {% if records %}
+                <span class="text-muted">Pagina {{ records.number }} de {{ records.paginator.num_pages }}</span>
+            {% endif %}
+        </div>
+
+        <div class="records-table-wrap">
+            <table class="table records-table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre</th>
+                        <th>Apellido</th>
+                        <th>Email</th>
+                        <th>Telefono</th>
+                        <th>Direccion</th>
+                        <th>Ciudad</th>
+                        <th>Estado</th>
+                        <th>Codigo Postal</th>
+                        <th>Fecha de Creacion</th>
+                        <th>ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if records %}
+                        {% for record in records %}
+                            <tr>
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td>{{ record.first_name }}</td>
+                                <td>{{ record.last_name }}</td>
+                                <td>{{ record.email }}</td>
+                                <td>{{ record.phone }}</td>
+                                <td>{{ record.address }}</td>
+                                <td>{{ record.city }}</td>
+                                <td>{{ record.state }}</td>
+                                <td>{{ record.zip_code }}</td>
+                                <td>{{ record.created_at }}</td>
+                                <td><a class="record-id-link" href="{% url 'customer_record' record.id %}">{{ record.id }}</a></td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="11" class="text-center text-muted py-4">No hay registros disponibles.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if records %}
+            <div class="pagination-wrap">
+                <nav aria-label="Paginacion de registros">
+                    <ul class="pagination justify-content-center flex-wrap mb-2">
+                        {% if records.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page=1" title="Primera pagina">&laquo;</a></li>
+                            <li class="page-item"><a class="page-link" href="?page={{ records.previous_page_number }}" title="Anterior">&lsaquo;</a></li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                            <li class="page-item disabled"><span class="page-link">&lsaquo;</span></li>
+                        {% endif %}
+
+                        {% for num in records.paginator.page_range %}
+                            {% if num >= records.number|add:'-2' and num <= records.number|add:'2' %}
+                                {% if records.number == num %}
+                                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if records.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ records.next_page_number }}" title="Siguiente">&rsaquo;</a></li>
+                            <li class="page-item"><a class="page-link" href="?page={{ records.paginator.num_pages }}" title="Ultima pagina">&raquo;</a></li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">&rsaquo;</span></li>
+                            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                    <p class="text-muted text-center mb-0">Pagina {{ records.number }} de {{ records.paginator.num_pages }}</p>
+                </nav>
+            </div>
+        {% endif %}
+    </section>
+{% else %}
+    <section class="app-panel login-grid">
+        <div class="login-visual">
+            <div>
+                <h1>Bienvenidos &#10022;</h1>
+                <p>Holii, estas en el registro de usuarios, espero que lo disfrutes!</p>
+            </div>
+        </div>
+
+        <div class="login-form-panel">
+            <p class="section-subtitle mb-1">Acceso al sistema</p>
+            <h1 class="section-title mb-4">Login</h1>
+
+            <form method="POST" action="{% url 'home' %}" novalidate>
+                {% csrf_token %}
+
+                <div class="mb-4">
+                    <label for="username" class="form-label fw-bold">Usuario</label>
+                    <div class="input-row">
+                        <span class="input-icon">U</span>
+                        <input type="text" class="form-control" name="username" id="username" placeholder="Ingresa tu usuario" required>
+                    </div>
+                    <div class="form-help">We'll never share your username with anyone else.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="form-label fw-bold">Password</label>
+                    <div class="input-row has-action">
+                        <span class="input-icon">P</span>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="********" required>
+                        <button class="toggle-password" type="button" id="togglePassword" aria-label="Mostrar u ocultar password">Ver</button>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="remember" name="remember">
+                        <label class="form-check-label text-muted" for="remember">Recordarme</label>
+                    </div>
+                    <a href="#" class="text-decoration-none">Olvidaste tu contrasena?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-2">Login</button>
+            </form>
+        </div>
+    </section>
+{% endif %}
+
+<script>
+    document.getElementById('togglePassword')?.addEventListener('click', function() {
+        const passwordInput = document.getElementById('password');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            this.textContent = 'Ocultar';
+        } else {
+            passwordInput.type = 'password';
+            this.textContent = 'Ver';
+        }
+    });
+</script>
+
+{% endblock %}
